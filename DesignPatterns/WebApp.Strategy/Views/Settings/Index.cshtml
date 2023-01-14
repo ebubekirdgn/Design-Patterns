@@ -1,0 +1,6 @@
+﻿@model Settings
+
+<form asp-controller="Settings" asp-action="ChangeDatabase" method="post">
+    <select name="databasetype" asp-for="DatabaseType" asp-items="Html.GetEnumSelectList<EDatabaseType>()"></select>
+    <button type="submit">Güncelle</button>
+</form>

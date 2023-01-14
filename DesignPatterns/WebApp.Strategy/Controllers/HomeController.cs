@@ -1,6 +1,6 @@
-﻿using BaseProject.Models;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using WebApp.Strategy.Models;
 
 namespace BaseProject.Controllers
 {
