@@ -1,37 +1,42 @@
 ﻿using BaseProject.Models;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WebApp.Strategy.Models;
+using WebApp.Strategy.Repositories;
 
 namespace WebApp.Strategy.Controllers
 {
+    [Authorize]
     public class ProductsController : Controller
     {
-        private readonly AppIdentityDbContext _context;
+        private readonly IProductRepository _productRepository;
+        private readonly UserManager<AppUser> _userManager;
 
-        public ProductsController(AppIdentityDbContext context)
+        public ProductsController(IProductRepository productRepository, UserManager<AppUser> userManager)
         {
-            _context = context;
+            _productRepository = productRepository;
+            _userManager = userManager;
         }
 
         // GET: Products
         public async Task<IActionResult> Index()
         {
-              return _context.Products != null ? 
-                          View(await _context.Products.ToListAsync()) :
-                          Problem("Entity set 'AppIdentityDbContext.Products'  is null.");
+            var user = await _userManager.FindByNameAsync(User.Identity.Name);
+
+            return View(await _productRepository.GetAllByUserId(user.Id));
         }
 
         // GET: Products/Details/5
         public async Task<IActionResult> Details(string id)
         {
-            if (id == null || _context.Products == null)
+            if (id == null)
             {
                 return NotFound();
             }
 
-            var product = await _context.Products
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var product = await _productRepository.GetById(id);
             if (product == null)
             {
                 return NotFound();
@@ -55,8 +60,10 @@ namespace WebApp.Strategy.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(product);
-                await _context.SaveChangesAsync();
+                var user = await _userManager.FindByNameAsync(User.Identity.Name);
+                product.UserId = user.Id;
+                product.CreatedDate = DateTime.Now;
+                await _productRepository.Save(product);
                 return RedirectToAction(nameof(Index));
             }
             return View(product);
@@ -65,12 +72,12 @@ namespace WebApp.Strategy.Controllers
         // GET: Products/Edit/5
         public async Task<IActionResult> Edit(string id)
         {
-            if (id == null || _context.Products == null)
+            if (id == null)
             {
                 return NotFound();
             }
 
-            var product = await _context.Products.FindAsync(id);
+            var product = await _productRepository.GetById(id);
             if (product == null)
             {
                 return NotFound();
@@ -94,8 +101,7 @@ namespace WebApp.Strategy.Controllers
             {
                 try
                 {
-                    _context.Update(product);
-                    await _context.SaveChangesAsync();
+                    await _productRepository.Update(product);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -116,13 +122,12 @@ namespace WebApp.Strategy.Controllers
         // GET: Products/Delete/5
         public async Task<IActionResult> Delete(string id)
         {
-            if (id == null || _context.Products == null)
+            if (id == null)
             {
                 return NotFound();
             }
 
-            var product = await _context.Products
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var product = await _productRepository.GetById(id);
             if (product == null)
             {
                 return NotFound();
@@ -136,23 +141,15 @@ namespace WebApp.Strategy.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(string id)
         {
-            if (_context.Products == null)
-            {
-                return Problem("Entity set 'AppIdentityDbContext.Products'  is null.");
-            }
-            var product = await _context.Products.FindAsync(id);
-            if (product != null)
-            {
-                _context.Products.Remove(product);
-            }
-            
-            await _context.SaveChangesAsync();
+            var product = await _productRepository.GetById(id);
+
+            await _productRepository.Delete(product);
             return RedirectToAction(nameof(Index));
         }
 
         private bool ProductExists(string id)
         {
-          return (_context.Products?.Any(e => e.Id == id)).GetValueOrDefault();
+            return _productRepository.GetById(id) != null;
         }
     }
 }

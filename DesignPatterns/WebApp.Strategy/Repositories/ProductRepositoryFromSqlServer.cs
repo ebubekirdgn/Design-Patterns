@@ -7,7 +7,6 @@ namespace WebApp.Strategy.Repositories
     public class ProductRepositoryFromSqlServer : IProductRepository
     {
         private readonly AppIdentityDbContext _context;
-
         public ProductRepositoryFromSqlServer(AppIdentityDbContext appIdentityDbContext)
         {
             _context = appIdentityDbContext;
@@ -15,10 +14,12 @@ namespace WebApp.Strategy.Repositories
 
         public async Task Delete(Product product)
         {
+
             // _context.Entry(product).State = Microsoft.EntityFrameworkCore.EntityState.Deleted;
             _context.Products.Remove(product);
 
             await _context.SaveChangesAsync();
+
         }
 
         public async Task<List<Product>> GetAllByUserId(string userId)
@@ -33,6 +34,7 @@ namespace WebApp.Strategy.Repositories
 
         public async Task<Product> Save(Product product)
         {
+
             product.Id = Guid.NewGuid().ToString();
             await _context.Products.AddAsync(product);
 

@@ -23,6 +23,7 @@ namespace WebApp.Strategy.Controllers
         public IActionResult Index()
         {
             Settings settings = new();
+
             if (User.Claims.Where(x => x.Type == Settings.claimDatabaseType).FirstOrDefault() != null)
             {
                 settings.DatabaseType = (EDatabaseType)int.Parse(User.Claims.First(x => x.Type == Settings.claimDatabaseType).Value);
