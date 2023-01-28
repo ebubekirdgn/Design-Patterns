@@ -7,10 +7,6 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
-
-
-
-
 builder.Services.AddDbContext<AppIdentityDbContext>(options =>
         options.UseSqlServer(builder.Configuration.GetConnectionString("SqlServer")));
 
@@ -18,7 +14,6 @@ builder.Services.AddIdentity<AppUser, IdentityRole>(options =>
 {
     options.User.RequireUniqueEmail = true;
 }).AddEntityFrameworkStores<AppIdentityDbContext>();
-
 
 var app = builder.Build();
 
@@ -29,11 +24,11 @@ using (var scope = app.Services.CreateScope())
     identityDbContext.Database.Migrate(); // migration yaptýktan sonra artýk update database dememize gerek yok eger hiç veritabaný yoksa hem veritabanýný oluþturur  þayet uygulanmayan migration varsada onu direk uygular.
     if (!userManager.Users.Any())
     {
-        userManager.CreateAsync(new AppUser(){UserName = "User1",Email="efc@gmail.com"},"Password123*").Wait();
-        userManager.CreateAsync(new AppUser(){UserName = "User2",Email="efc1@gmail.com"},"Password123*").Wait();
-        userManager.CreateAsync(new AppUser(){UserName = "User3",Email="efc2@gmail.com"},"Password123*").Wait();
-        userManager.CreateAsync(new AppUser(){UserName = "User4",Email="efc3@gmail.com"},"Password123*").Wait();
-        userManager.CreateAsync(new AppUser(){UserName = "User5",Email="efc4@gmail.com"},"Password123*").Wait();
+        userManager.CreateAsync(new AppUser() { UserName = "User1", Email = "efc@gmail.com" }, "Password123*").Wait();
+        userManager.CreateAsync(new AppUser() { UserName = "User2", Email = "efc1@gmail.com" }, "Password123*").Wait();
+        userManager.CreateAsync(new AppUser() { UserName = "User3", Email = "efc2@gmail.com" }, "Password123*").Wait();
+        userManager.CreateAsync(new AppUser() { UserName = "User4", Email = "efc3@gmail.com" }, "Password123*").Wait();
+        userManager.CreateAsync(new AppUser() { UserName = "User5", Email = "efc4@gmail.com" }, "Password123*").Wait();
     }
 }
 

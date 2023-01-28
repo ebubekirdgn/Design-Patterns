@@ -11,8 +11,11 @@ namespace WebApp.Template.UserCards
         {
             _appUser = appUser;
         }
+
         protected abstract string SetFooter();
+
         protected abstract string SetPicture();
+
         public string Build()
         {
             if (_appUser == null) throw new ArgumentNullException(nameof(AppUser));

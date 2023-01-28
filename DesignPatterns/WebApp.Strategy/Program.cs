@@ -51,7 +51,6 @@ if (!userManager.Users.Any())
     userManager.CreateAsync(new AppUser() { UserName = "User5", Email = "efc4@gmail.com" }, "Password123*").Wait();
 }
 
-
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {

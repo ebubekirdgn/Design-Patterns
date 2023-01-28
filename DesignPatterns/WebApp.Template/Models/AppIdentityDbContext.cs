@@ -7,7 +7,6 @@ namespace BaseProject.Models
     {
         public AppIdentityDbContext(DbContextOptions<AppIdentityDbContext> options) : base(options)
         {
-
         }
     }
 }
