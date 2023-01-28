@@ -14,7 +14,7 @@ namespace WebApp.Template.UserCards
 
         protected override string SetPicture()
         {
-            return $"<img class='card-img-top' src='{_appUser.PictureUrl}'";
+            return $"<img class='card-img-top' src='{AppUser.PictureUrl}'";
         }
     }
 }
