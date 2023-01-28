@@ -7,14 +7,15 @@ namespace WebApp.Template.UserCards
         protected override string SetFooter()
         {
             var sb = new StringBuilder();
-            sb.Append("<a href='#' class='card-link'> Mesaj Gönder </a>");
-            sb.Append("<a href='#' class='card-link'> Detaylı Profil</a>");
+
+            sb.Append("<a href='#' class='card-link'>Mesaj gönder</a>");
+            sb.Append("<a href='#' class='card-link'>Detaylı profil</a>");
             return sb.ToString();
         }
 
         protected override string SetPicture()
         {
-            return $"<img class='card-img-top' src='{AppUser.PictureUrl}'";
+            return $"<img class='card-img-top' src='{AppUser.PictureUrl}'>";
         }
     }
 }

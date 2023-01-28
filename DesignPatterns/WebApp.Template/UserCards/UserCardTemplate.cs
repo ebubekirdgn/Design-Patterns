@@ -12,10 +12,6 @@ namespace WebApp.Template.UserCards
             AppUser = appUser;
         }
 
-        protected abstract string SetFooter();
-
-        protected abstract string SetPicture();
-
         public string Build()
         {
             if (AppUser == null) throw new ArgumentNullException(nameof(AppUser));
@@ -33,5 +29,9 @@ namespace WebApp.Template.UserCards
 
             return sb.ToString();
         }
+
+        protected abstract string SetFooter();
+
+        protected abstract string SetPicture();
     }
 }
